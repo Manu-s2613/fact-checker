@@ -47,12 +47,22 @@ async def get_post(post_id: str):
 @router.post("", response_model=Post)
 async def create_post(request: CreatePostRequest, authorization: Optional[str] = Header(None)):
     _initialize_data()
+    
+    # Debug log
+    print(f"Authorization header received: {authorization}")
+    
     if not authorization:
         raise HTTPException(status_code=401, detail="Authorization required")
-    token = authorization.replace("Bearer ", "")
+    
+    token = authorization.replace("Bearer ", "").strip()
+    print(f"Token extracted: {token}")
+    
     user_id = validate_mock_token(token)
+    print(f"User ID from token: {user_id}")
+    
     if not user_id:
         raise HTTPException(status_code=401, detail="Invalid token")
+    
     user = get_user_by_id(user_id)
     if not user:
         raise HTTPException(status_code=401, detail="User not found")

@@ -6,7 +6,9 @@ export const saveAuth = (token, user) => {
   localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user))
 }
 
-export const getToken = () => localStorage.getItem(AUTH_TOKEN_KEY)
+export const getToken = () => {
+  return localStorage.getItem(AUTH_TOKEN_KEY)
+}
 
 export const getUser = () => {
   const userStr = localStorage.getItem(AUTH_USER_KEY)
@@ -16,7 +18,10 @@ export const getUser = () => {
   return null
 }
 
-export const isAuthenticated = () => !!getToken()
+export const isAuthenticated = () => {
+  const token = getToken()
+  return token !== null && token !== undefined && token !== ''
+}
 
 export const logout = () => {
   localStorage.removeItem(AUTH_TOKEN_KEY)

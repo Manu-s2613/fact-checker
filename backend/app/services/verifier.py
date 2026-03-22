@@ -94,4 +94,5 @@ def get_verifier() -> FactVerifier:
     global _verifier
     if _verifier is None:
         _verifier = FactVerifier()
+    
     return _verifier
