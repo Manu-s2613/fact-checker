@@ -43,7 +43,7 @@ function Feed() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen transition-colors duration-300" style={{ backgroundColor: 'transparent' }}>
       <Header />
       <main className="max-w-2xl mx-auto px-4 py-6">
         {loading ? (
@@ -53,12 +53,20 @@ function Feed() {
         ) : (
           <div className="space-y-6 animate-fade-in">
             {posts.map((post) => (
-              <PostCard key={post.id} post={post} onVerifyResult={handleVerifyResult} onPostUpdate={handlePostUpdate} />
+              <PostCard
+                key={post.id}
+                post={post}
+                onVerifyResult={handleVerifyResult}
+                onPostUpdate={handlePostUpdate}
+              />
             ))}
             {posts.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-500 mb-4">No posts yet</p>
-                <button onClick={() => setShowCreatePost(true)} className="text-purple-600 hover:text-purple-700 font-medium">
+                <p className="text-gray-500 dark:text-gray-400 mb-4">No posts yet</p>
+                <button
+                  onClick={() => setShowCreatePost(true)}
+                  className="text-purple-600 hover:text-purple-700 font-medium"
+                >
                   Create your first post
                 </button>
               </div>
@@ -67,14 +75,26 @@ function Feed() {
         )}
       </main>
 
-      <button onClick={() => setShowCreatePost(true)}
+      <button
+        onClick={() => setShowCreatePost(true)}
         className="fixed bottom-8 right-8 bg-gradient-to-r from-purple-600 to-purple-700 text-white p-4 rounded-full shadow-2xl hover:from-purple-700 hover:to-purple-800 transform hover:scale-110 transition-all duration-200 z-40"
-        aria-label="Create post">
+        aria-label="Create post"
+      >
         <Plus className="w-6 h-6" />
       </button>
 
-      {showCreatePost && <CreatePostModal onClose={() => setShowCreatePost(false)} onPostCreated={handlePostCreated} />}
-      {showVerifyModal && verifyResult && <VerifyResultModal result={verifyResult} onClose={() => setShowVerifyModal(false)} />}
+      {showCreatePost && (
+        <CreatePostModal
+          onClose={() => setShowCreatePost(false)}
+          onPostCreated={handlePostCreated}
+        />
+      )}
+      {showVerifyModal && verifyResult && (
+        <VerifyResultModal
+          result={verifyResult}
+          onClose={() => setShowVerifyModal(false)}
+        />
+      )}
     </div>
   )
 }

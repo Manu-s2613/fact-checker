@@ -46,7 +46,7 @@ function Login() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl mb-4 shadow-lg">
             <Shield className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold gradient-text mb-2">Fact-Check Social</h1>
+          <h1 className="text-3xl font-bold gradient-text mb-2">FactLens</h1>
           <p className="text-gray-600 text-sm">Automated Fact Checker for Vernacular News</p>
         </div>
 

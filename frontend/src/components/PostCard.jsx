@@ -3,6 +3,7 @@ import { Heart, MessageCircle, Share2, Bookmark, ShieldCheck, Send, MoreHorizont
 import CommentSection from './CommentSection'
 import { verifyPost, likePost, createComment } from '../services/api'
 import { getUser } from '../utils/auth'
+import { useTheme } from '../utils/theme.jsx'
 
 function PostCard({ post, onVerifyResult, onPostUpdate }) {
   const currentUser = getUser()
@@ -14,6 +15,7 @@ function PostCard({ post, onVerifyResult, onPostUpdate }) {
   const [localComments, setLocalComments] = useState(post.comments || [])
   const [commentText, setCommentText] = useState('')
   const [addingComment, setAddingComment] = useState(false)
+  const { darkMode } = useTheme()
 
   const formatTimeAgo = (dateString) => {
     const date = new Date(dateString)
@@ -61,25 +63,25 @@ function PostCard({ post, onVerifyResult, onPostUpdate }) {
       setCommentText('')
       if (onPostUpdate) onPostUpdate({ ...post, comments_count: post.comments_count + 1, comments: updated })
     } catch {
-      alert('Failed to add comment. Please try again.')
+      alert('Failed to add comment.')
     } finally {
       setAddingComment(false)
     }
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden">
+    <div className="rounded-2xl..." style={{ backgroundColor: darkMode ? '#111111' : 'white' }}>
       {/* Header */}
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center space-x-3">
           <img src={post.avatar_url} alt={post.username} className="w-10 h-10 rounded-full ring-2 ring-purple-100" />
           <div>
-            <p className="font-semibold text-gray-900">{post.username}</p>
-            <p className="text-xs text-gray-500">{formatTimeAgo(post.created_at)}</p>
+            <p className="font-semibold text-gray-900 dark:text-white">{post.username}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{formatTimeAgo(post.created_at)}</p>
           </div>
         </div>
-        <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-          <MoreHorizontal className="w-5 h-5 text-gray-600" />
+        <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+          <MoreHorizontal className="w-5 h-5 text-gray-600 dark:text-gray-400" />
         </button>
       </div>
 
@@ -93,13 +95,13 @@ function PostCard({ post, onVerifyResult, onPostUpdate }) {
       <div className="p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-4">
-            <button onClick={handleLike} className={`transition-colors ${liked ? 'text-red-500' : 'text-gray-700 hover:text-red-500'}`}>
+            <button onClick={handleLike} className={`transition-colors ${liked ? 'text-red-500' : 'text-gray-700 dark:text-gray-300 hover:text-red-500'}`}>
               <Heart className={`w-6 h-6 ${liked ? 'fill-current' : ''}`} />
             </button>
-            <button onClick={() => setShowComments(!showComments)} className="text-gray-700 hover:text-purple-600 transition-colors">
+            <button onClick={() => setShowComments(!showComments)} className="text-gray-700 dark:text-gray-300 hover:text-purple-600 transition-colors">
               <MessageCircle className="w-6 h-6" />
             </button>
-            <button className="text-gray-700 hover:text-purple-600 transition-colors">
+            <button className="text-gray-700 dark:text-gray-300 hover:text-purple-600 transition-colors">
               <Share2 className="w-6 h-6" />
             </button>
           </div>
@@ -112,34 +114,38 @@ function PostCard({ post, onVerifyResult, onPostUpdate }) {
                 <><ShieldCheck className="w-4 h-4" /><span className="text-sm font-medium">Verify</span></>
               )}
             </button>
-            <button onClick={() => setSaved(!saved)} className={`transition-colors ${saved ? 'text-purple-600' : 'text-gray-700 hover:text-purple-600'}`}>
+            <button onClick={() => setSaved(!saved)} className={`transition-colors ${saved ? 'text-purple-600' : 'text-gray-700 dark:text-gray-300 hover:text-purple-600'}`}>
               <Bookmark className={`w-6 h-6 ${saved ? 'fill-current' : ''}`} />
             </button>
           </div>
         </div>
 
-        <p className="font-semibold text-sm text-gray-900 mb-2">{localLikes.toLocaleString()} {localLikes === 1 ? 'like' : 'likes'}</p>
+        <p className="font-semibold text-sm text-gray-900 dark:text-white mb-2">
+          {localLikes.toLocaleString()} {localLikes === 1 ? 'like' : 'likes'}
+        </p>
 
         <div className="mb-2">
-          <p className="text-gray-900"><span className="font-semibold mr-2">{post.username}</span>{post.caption}</p>
+          <p className="text-gray-900 dark:text-gray-100">
+            <span className="font-semibold mr-2">{post.username}</span>{post.caption}
+          </p>
         </div>
 
         {localComments.length > 0 && !showComments && (
-          <button onClick={() => setShowComments(true)} className="text-sm text-gray-500 hover:text-gray-700 mb-2">
+          <button onClick={() => setShowComments(true)} className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 mb-2">
             View all {localComments.length} comments
           </button>
         )}
 
         {showComments && <CommentSection comments={localComments} />}
 
-        <form onSubmit={handleAddComment} className="flex items-center space-x-2 mt-3 pt-3 border-t border-gray-100">
+        <form onSubmit={handleAddComment} className="flex items-center space-x-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
           <img
-            src={currentUser?.avatar_url || `https://ui-avatars.com/api/?name=User&background=9333ea&color=fff`}
+            src={currentUser?.avatar_url || "https://ui-avatars.com/api/?name=User&background=9333ea&color=fff"}
             alt="Your avatar" className="w-8 h-8 rounded-full"
           />
           <input type="text" value={commentText} onChange={(e) => setCommentText(e.target.value)}
             placeholder="Add a comment..."
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm"
+            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400"
             disabled={addingComment}
           />
           <button type="submit" disabled={!commentText.trim() || addingComment}
